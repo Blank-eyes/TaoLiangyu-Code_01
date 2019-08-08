@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.study.mapper.StudentMapper">
+ 
+   <insert id="addStudent" parameterType="com.study.bean.StudentBean">
+     <selectKey keyColumn="student_id" keyProperty="studentId" order="AFTER" resultType="Integer">
+       select LAST_INSERT_ID()
+     </selectKey>
+     INSERT INTO studentinfo
+	VALUES (NULL, #{studentName}, #{studentSex}, #{studentAge})
+   </insert>
+ 
+   <select id="getStudentById" parameterType="Integer" resultType="com.study.bean.StudentBean">
+     	SELECT
+		  student_id,
+		  student_name,
+		  student_sex,
+		  student_age
+		FROM studentinfo
+		WHERE student_id =#{student_id}
+   </select>
+   
+   <!-- 根据条件查询学生信息集合 -->
+   <select id="findStudents" parameterType="Map" resultType="com.study.bean.StudentBean">
+     select * from studentinfo where student_age <![CDATA[< #{studentAge}]]>
+   </select>
+   
+   <delete id="delStudent" parameterType="Integer">
+    delete from studentinfo where student_id = #{studentId};
+   </delete>
+   
+   <update id="modifyStudent" parameterType="com.study.bean.StudentBean">
+     update studentinfo set student_sex = #{studentSex} where student_id = #{studentId};
+   </update>
+   
+ </mapper>
